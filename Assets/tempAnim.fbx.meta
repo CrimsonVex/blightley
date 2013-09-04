@@ -1,0 +1,179 @@
+fileFormatVersion: 2
+guid: c1b540834b826914f8e2b58723595e99
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: anim_global01
+    100002: anim_l_leg01
+    100004: anim_pelvis01
+    100006: anim_r_leg01
+    100008: be_l_ankle01
+    100010: be_l_toe01
+    100012: be_pelvis01
+    100014: be_r_ankle01
+    100016: be_r_toe01
+    100018: bn_l_ankle01
+    100020: bn_l_foot01
+    100022: bn_l_shin01
+    100024: bn_l_thigh01
+    100026: bn_pelvis01
+    100028: bn_r_ankle01
+    100030: bn_r_foot01
+    100032: bn_r_shin01
+    100034: bn_r_thigh01
+    100036: controls01
+    100038: iks01
+    100040: jDrv_l_ankle01
+    100042: jDrv_l_BankLeft01
+    100044: jDrv_l_BankRight01
+    100046: jDrv_l_foot01
+    100048: jDrv_l_heel01
+    100050: jDrv_l_toe01
+    100052: jDrv_r_ankle01
+    100054: jDrv_r_BankLeft01
+    100056: jDrv_r_BankRight01
+    100058: jDrv_r_foot01
+    100060: jDrv_r_heel01
+    100062: jDrv_r_toe01
+    100064: mesh
+    100066: rpIK_l_leg01
+    100068: rpIK_r_leg01
+    100070: skeleton01
+    100072: //RootNode
+    400000: anim_global01
+    400002: anim_l_leg01
+    400004: anim_pelvis01
+    400006: anim_r_leg01
+    400008: be_l_ankle01
+    400010: be_l_toe01
+    400012: be_pelvis01
+    400014: be_r_ankle01
+    400016: be_r_toe01
+    400018: bn_l_ankle01
+    400020: bn_l_foot01
+    400022: bn_l_shin01
+    400024: bn_l_thigh01
+    400026: bn_pelvis01
+    400028: bn_r_ankle01
+    400030: bn_r_foot01
+    400032: bn_r_shin01
+    400034: bn_r_thigh01
+    400036: controls01
+    400038: iks01
+    400040: jDrv_l_ankle01
+    400042: jDrv_l_BankLeft01
+    400044: jDrv_l_BankRight01
+    400046: jDrv_l_foot01
+    400048: jDrv_l_heel01
+    400050: jDrv_l_toe01
+    400052: jDrv_r_ankle01
+    400054: jDrv_r_BankLeft01
+    400056: jDrv_r_BankRight01
+    400058: jDrv_r_foot01
+    400060: jDrv_r_heel01
+    400062: jDrv_r_toe01
+    400064: mesh
+    400066: rpIK_l_leg01
+    400068: rpIK_r_leg01
+    400070: skeleton01
+    400072: //RootNode
+    4300000: mesh
+    7400000: Run
+    7400002: Jump
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: mesh
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations:
+    - name: Run
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 30
+      wrapMode: 2
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopBlend: 1
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      transformMask: []
+    - name: Jump
+      takeName: Take 001
+      firstFrame: 31
+      lastFrame: 47
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      transformMask: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .00999999978
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 1
+  userData: 
