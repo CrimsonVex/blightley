@@ -83,7 +83,7 @@ public class NPC : MonoBehaviour
             controller.SimpleMove(dir);
 
             // Check if we are close enough to the next waypoint, if we are, proceed to follow the next waypoint
-            if (Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]) < nextWaypointDistance)
+            if (Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]) < nextWaypointDistance / 2)
             {
                 currentWaypoint++;
                 return;
