@@ -16,6 +16,7 @@ public class SphereTriggerRPC : MonoBehaviour
 
     void OnTriggerEnter(Collider c)
     {
+        Debug.Log(c.tag);
         if (Network.isServer && c.gameObject.tag == "Player")
         {
             networkView.RPC("NewTimedMessage", RPCMode.All, "Player " + c.networkView.owner + " lit the beacon!", 5.0f);

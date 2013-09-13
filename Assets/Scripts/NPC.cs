@@ -15,17 +15,22 @@ public class NPC : MonoBehaviour
     float nextWaypointDistance = 3;
     int currentWaypoint = 0;
 
-    void Start()
-    {
-        seeker = GetComponent<Seeker>();
-        controller = GetComponent<CharacterController>();
+    bool startPathCalled = false;
 
-        seeker.StartPath(transform.position, targetPos, OnPathComplete);
+    public void StartPath()
+    {
+        if (Network.isServer)
+        {
+            seeker = GetComponent<Seeker>();
+            controller = GetComponent<CharacterController>();
+
+            seeker.StartPath(transform.position, targetPos, OnPathComplete);
+        }
     }
 
     void OnTriggerEnter(Collider c)
     {
-        if (c.gameObject.tag == "Player")
+        if (Network.isServer && c.gameObject.tag == "Player")
         {
             infected = true;
             Vector3 green = new Vector3(0, 1, 0);
@@ -35,39 +40,54 @@ public class NPC : MonoBehaviour
 
     public void OnPathComplete(Path p)
     {
-        Debug.Log("Yay, we got a path back. Did it have an error? " + p.error);
-
-        if (!p.error)
+        if (Network.isServer)
         {
-            path = p;
-            currentWaypoint = 0;
+            Debug.Log("Yay, we got a path back. Did it have an error? " + p.error);
+
+            if (!p.error)
+            {
+                path = p;
+                currentWaypoint = 0;
+            }
+        }
+    }
+
+    void Update()
+    {
+        if (NetworkManager.serverStarted && !startPathCalled)
+        {
+            StartPath();
+            startPathCalled = true;
         }
     }
 
     void FixedUpdate()
     {
-        if (path == null)
+        if (Network.isServer)
         {
-            Debug.Log("No path");
-            return;
-        }
+            if (path == null)
+            {
+                Debug.Log("No path");
+                return;
+            }
 
-        if (currentWaypoint >= path.vectorPath.Count)
-        {
-            Debug.Log("End Of Path Reached");
-            return;
-        }
+            if (currentWaypoint >= path.vectorPath.Count)
+            {
+                Debug.Log("End Of Path Reached");
+                return;
+            }
 
-        // Direction to the next waypoint
-        Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
-        dir *= speed * Time.fixedDeltaTime;
-        controller.SimpleMove(dir);
+            // Direction to the next waypoint
+            Vector3 dir = (path.vectorPath[currentWaypoint] - transform.position).normalized;
+            dir *= speed * Time.fixedDeltaTime;
+            controller.SimpleMove(dir);
 
-        // Check if we are close enough to the next waypoint, if we are, proceed to follow the next waypoint
-        if (Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]) < nextWaypointDistance)
-        {
-            currentWaypoint++;
-            return;
+            // Check if we are close enough to the next waypoint, if we are, proceed to follow the next waypoint
+            if (Vector3.Distance(transform.position, path.vectorPath[currentWaypoint]) < nextWaypointDistance)
+            {
+                currentWaypoint++;
+                return;
+            }
         }
     }
 

@@ -11,6 +11,7 @@ public class NetworkManager : MonoBehaviour
         public int playerID;
     }
 
+    public static bool serverStarted = false;
     public GameObject playerPrefab, playerCamera, timedMessagePrefab;
     public List<PLAYER> PLAYERS;
     private int currPlayerCount = 0, totalPlayerCount = 0;
@@ -27,6 +28,7 @@ public class NetworkManager : MonoBehaviour
         PLAYERS = new List<PLAYER>();
 
         NewTimedMessage("Connected as SERVER", 6);
+        serverStarted = true;
     }
 
     void ConnectToServer()
