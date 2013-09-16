@@ -5,8 +5,8 @@ public class CameraController : MonoBehaviour
 {
     public Transform player;
 
-    private float chaseDistance = 5.5f;
-    private float chaseHeight = 6.0f;
+    private float chaseDistance = 8f;
+    private float chaseHeight = 8.0f;
     private float followDampening = 0.5f;
     private float lookAtDampening = 20.0f;
 

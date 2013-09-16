@@ -4,12 +4,11 @@ using System.Collections;
 public class Move : MonoBehaviour
 {
     
-
     void Awake()
     {
         if (networkView.isMine)
         {
-            
+
         }
     }
 
@@ -17,7 +16,7 @@ public class Move : MonoBehaviour
     {
         if (networkView.isMine)
         {
-            rigidbody.AddRelativeForce(Vector3.forward * 4 * Input.GetAxis("Vertical"));
+            rigidbody.AddRelativeForce(Vector3.forward * 10 * Input.GetAxis("Vertical"));
             rigidbody.AddRelativeTorque(new Vector3(0, Input.GetAxis("Horizontal"), 0));
         }
     }
