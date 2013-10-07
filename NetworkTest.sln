@@ -5,6 +5,8 @@ Project("{AF0E551A-C5E9-418F-6F02-DAF6E8A827D5}") = "NetworkTest", "Assembly-CSh
 EndProject
 Project("{AF0E551A-C5E9-418F-6F02-DAF6E8A827D5}") = "NetworkTest", "Assembly-CSharp-Editor.csproj", "{80D34AB7-894A-3F69-84D6-925632BD8ECD}"
 EndProject
+Project("{AF0E551A-C5E9-418F-6F02-DAF6E8A827D5}") = "NetworkTest", "Assembly-UnityScript.unityproj", "{FCA2DF20-A807-EDC7-70C7-485702A44505}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,11 +21,15 @@ Global
 		{80D34AB7-894A-3F69-84D6-925632BD8ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80D34AB7-894A-3F69-84D6-925632BD8ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80D34AB7-894A-3F69-84D6-925632BD8ECD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCA2DF20-A807-EDC7-70C7-485702A44505}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCA2DF20-A807-EDC7-70C7-485702A44505}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCA2DF20-A807-EDC7-70C7-485702A44505}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCA2DF20-A807-EDC7-70C7-485702A44505}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																																																		GlobalSection(MonoDevelopProperties) = preSolution
+																																																													GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1
