@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;    
+using System.Collections;
 
 public class PlayerAnimation : MonoBehaviour
 {
@@ -7,7 +7,7 @@ public class PlayerAnimation : MonoBehaviour
     public string[] animations = new string[8];
     private string oldAnimation, currentAnimation;
     //walk, run, attack, wince, death, bipedToRun, idle, crouch;
-     
+
     void Start()
     {
         _anim = this.GetComponent<Animation>();
@@ -19,7 +19,8 @@ public class PlayerAnimation : MonoBehaviour
         animations[5] = "Death";
         animations[6] = "Crouch";
         animations[7] = "BipedToRun";
-        setAnimation(animations[0]);
+        networkView.RPC("setAnimationState", RPCMode.Others, 0);
+        setAnimationState(0);
     }
 
     void Update()
@@ -47,10 +48,15 @@ public class PlayerAnimation : MonoBehaviour
         }
 
         Debug.Log(currentAnimation + "     " + oldAnimation);
+
         // Ensure the default animations only play if another animation isnt already playing
         // New connecting players need to see other players at their current correct frame for their animations
+
+        // Animations are kind of irrelevant
+        // You should be sending gameplay events that should trigger animations locally
+        // Fuck sending animations
     }
-     
+
     void setAnimation(string state)
     {
         if (networkView.isMine)
