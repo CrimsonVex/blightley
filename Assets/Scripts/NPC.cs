@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Pathfinding;
 
 public class NPC : MonoBehaviour
@@ -14,7 +16,7 @@ public class NPC : MonoBehaviour
     float speed = 100;
     float nextWaypointDistance = 3;
     int currentWaypoint = 0;
-
+    
     bool startPathCalled = false;
 
     public void StartPath()
@@ -33,9 +35,31 @@ public class NPC : MonoBehaviour
         if (Network.isServer && c.gameObject.tag == "Player")
         {
             infected = true;
+            targetPos = FindHero();
+            if (Network.isServer)
+                seeker.StartPath(transform.position, targetPos, OnPathComplete);
             Vector3 green = new Vector3(0, 1, 0);
             networkView.RPC("SetColor", RPCMode.AllBuffered, green);
         }
+    }
+
+    Vector3 FindHero()
+    {
+        // Hero list should be dynamic...And refresh with new players.
+
+
+        List<GameObject> heroList = new List<GameObject>();
+        GameObject[] playerList;
+        playerList = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject player in playerList)
+        {
+            if (player.GetComponent<Player>().type == 2)
+                heroList.Add(player);
+        }
+        Debug.Log("Count: " + heroList.Count);
+        int r = Random.Range(0, heroList.Count() );
+        Vector3 pos = heroList[r].transform.position;
+        return pos;
     }
 
     public void OnPathComplete(Path p)

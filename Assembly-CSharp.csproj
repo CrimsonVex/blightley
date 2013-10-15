@@ -105,7 +105,6 @@
      <Compile Include="Assets\AstarPathfindingProject\Utilities\SizeProfiler.cs" />
      <Compile Include="Assets\AstarPathfindingProject\Utilities\UnityReferenceHelper.cs" />
      <Compile Include="Assets\AstarPathfindingProject\changelog.cs" />
-     <Compile Include="Assets\PlayerAnimation.cs" />
      <Compile Include="Assets\Scripts\AnimationTest.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
      <Compile Include="Assets\Scripts\Move.cs" />
@@ -114,6 +113,8 @@
      <Compile Include="Assets\Scripts\NetworkRigidbody.cs" />
      <Compile Include="Assets\Scripts\NetworkTransform.cs" />
      <Compile Include="Assets\Scripts\Player.cs" />
+     <Compile Include="Assets\Scripts\PlayerAnimation.cs" />
+     <Compile Include="Assets\Scripts\PlayerAttributes.cs" />
      <Compile Include="Assets\Scripts\RigidbodyTestMovement.cs" />
      <Compile Include="Assets\Scripts\SphereTriggerRPC.cs" />
      <Compile Include="Assets\Scripts\TimedMessage.cs" />
