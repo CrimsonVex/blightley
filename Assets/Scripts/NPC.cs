@@ -8,6 +8,10 @@ public class NPC : MonoBehaviour
 {
     // Infection Status
     public bool infected = false;
+    bool findHero = false;
+    bool isFindingHero = false;
+    List<GameObject> heroList;
+    float pathUpdateTimeSince = 0f;
 
     Path path;
     Seeker seeker;
@@ -35,20 +39,18 @@ public class NPC : MonoBehaviour
         if (Network.isServer && c.gameObject.tag == "Player")
         {
             infected = true;
-            targetPos = FindHero();
-            if (Network.isServer)
-                seeker.StartPath(transform.position, targetPos, OnPathComplete);
+            GetHeroList();
+            if (!isFindingHero)
+                findHero = true;
+            
             Vector3 green = new Vector3(0, 1, 0);
             networkView.RPC("SetColor", RPCMode.AllBuffered, green);
         }
     }
 
-    Vector3 FindHero()
+    void GetHeroList()
     {
-        // Hero list should be dynamic...And refresh with new players.
-
-
-        List<GameObject> heroList = new List<GameObject>();
+        heroList = new List<GameObject>();
         GameObject[] playerList;
         playerList = GameObject.FindGameObjectsWithTag("Player");
         foreach (GameObject player in playerList)
@@ -56,9 +58,15 @@ public class NPC : MonoBehaviour
             if (player.GetComponent<Player>().type == 2)
                 heroList.Add(player);
         }
+    }
+
+    Vector3 FindHero()
+    {
+        // Hero list should be dynamic...And refresh with new players.
         Debug.Log("Count: " + heroList.Count);
         int r = Random.Range(0, heroList.Count() );
         Vector3 pos = heroList[r].transform.position;
+        isFindingHero = true;
         return pos;
     }
 
@@ -82,6 +90,16 @@ public class NPC : MonoBehaviour
         {
             StartPath();
             startPathCalled = true;
+        }
+        else if (Network.isServer && NetworkManager.serverStarted && startPathCalled && findHero)
+        {
+            if ((pathUpdateTimeSince += Time.deltaTime) > 1.1f)
+            {
+                pathUpdateTimeSince = 0f;
+                targetPos = FindHero();
+                seeker.StartPath(transform.position, targetPos, OnPathComplete);
+                Debug.Log("Infected NPC now tracking enemy hero at position: " + targetPos);
+            }
         }
     }
 

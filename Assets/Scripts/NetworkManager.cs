@@ -63,10 +63,15 @@ public class NetworkManager : MonoBehaviour
         serverStarted = true;
     }
 
-    public void ConnectToServer()
+    public NetworkConnectionError ConnectToServer()
     {
-        Network.Connect("127.0.0.1", 25000, "");
+        return Network.Connect("127.0.0.1", 25000, "");
     }
+
+    public void OnFailedToConnect(NetworkConnectionError error)
+    {
+        //NewTimedMessage("Couldn't find a server to connect to. Have you created one?", 5);
+	}
 
     public void OnGUI()
     {
@@ -76,7 +81,7 @@ public class NetworkManager : MonoBehaviour
                 StartServer();
 
             if (GUI.Button(new Rect(120, 10, 150, 20), "Join Existing Game"))
-                ConnectToServer();
+                Debug.Log(ConnectToServer());
         }
 
         if (Network.isServer)
