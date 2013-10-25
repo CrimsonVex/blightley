@@ -16,7 +16,7 @@ public class NPC : MonoBehaviour
     Path path;
     Seeker seeker;
     CharacterController controller;
-    Vector3 targetPos = new Vector3(20, 0, 45);
+    Vector3 targetPos = new Vector3(40, 0, 40);
     float speed = 100;
     float nextWaypointDistance = 3;
     int currentWaypoint = 0;
@@ -34,12 +34,41 @@ public class NPC : MonoBehaviour
         }
     }
 
+    void OnGUI()
+    {
+        if (Network.isServer)
+            GUI.Label(new Rect(Screen.width - 150, 80, 300, 20), "NPC: PLAYERS Count: " + NetworkManager.Instance.PLAYERS.Count);
+    }
+
+    NetworkManager.PLAYER FindInstigator(Collider c)
+    {
+        NetworkManager.PLAYER p = NetworkManager.Instance.PLAYERS.Find(i => i.player == c.networkView.owner);
+        return p;
+    }
+
+    Vector3 FindTargetPos()
+    {
+        NetworkManager.PLAYER target;
+        target = NetworkManager.Instance.PLAYERS.Find(i => i.playerType == 2);
+        if (target.pObject == null)
+        {
+            Debug.Log("NPC can't find a target. Is there a TYPE 2 player in-game?");
+            return targetPos;
+        }
+        else
+            return target.pObject.transform.position;
+    }
+
     void OnTriggerEnter(Collider c)
     {
         if (Network.isServer && c.gameObject.tag == "Player")
         {
+            NetworkManager.PLAYER p = FindInstigator(c);
+            Debug.Log("Player: " + p.playerID + " infected the NPC");
+
             infected = true;
-            GetHeroList();
+            targetPos = FindTargetPos();
+
             if (!isFindingHero)
                 findHero = true;
             
@@ -64,8 +93,15 @@ public class NPC : MonoBehaviour
     {
         // Hero list should be dynamic...And refresh with new players.
         Debug.Log("Count: " + heroList.Count);
-        int r = Random.Range(0, heroList.Count() );
-        Vector3 pos = heroList[r].transform.position;
+        int r = Random.Range(0, heroList.Count());
+        Vector3 pos;
+        if (heroList[r].transform)
+            pos = heroList[r].transform.position;
+        else
+        {
+            GetHeroList();
+            pos = heroList[r].transform.position;
+        }
         isFindingHero = true;
         return pos;
     }
@@ -86,17 +122,17 @@ public class NPC : MonoBehaviour
 
     void Update()
     {
-        if (NetworkManager.serverStarted && !startPathCalled)
+        if (NetworkManager.Instance.serverStarted && !startPathCalled)
         {
             StartPath();
             startPathCalled = true;
         }
-        else if (Network.isServer && NetworkManager.serverStarted && startPathCalled && findHero)
+        else if (Network.isServer && NetworkManager.Instance.serverStarted && startPathCalled && findHero)
         {
             if ((pathUpdateTimeSince += Time.deltaTime) > 1.1f)
             {
                 pathUpdateTimeSince = 0f;
-                targetPos = FindHero();
+                targetPos = FindTargetPos();
                 seeker.StartPath(transform.position, targetPos, OnPathComplete);
                 Debug.Log("Infected NPC now tracking enemy hero at position: " + targetPos);
             }

@@ -16,8 +16,8 @@ public class Move : MonoBehaviour
     {
         if (networkView.isMine)
         {
-            rigidbody.AddRelativeForce(Vector3.forward * 10 * Input.GetAxis("Vertical"));
-            rigidbody.AddRelativeTorque(new Vector3(0, Input.GetAxis("Horizontal"), 0));
+            rigidbody.AddRelativeForce(Vector3.forward * Input.GetAxis("Vertical"));
+            rigidbody.AddRelativeTorque(new Vector3(0, Input.GetAxis("Horizontal") / 10, 0));
         }
     }
 }

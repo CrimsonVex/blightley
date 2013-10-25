@@ -43,9 +43,9 @@ public class NetworkManager : MonoBehaviour
     }
 
     public static Random rand = new Random();
-    public static bool serverStarted = false;
+    public bool serverStarted = false;
     public GameObject playerPrefab, playerCamera, timedMessagePrefab;
-    public List<PLAYER> PLAYERS;
+    public List<PLAYER> PLAYERS = new List<PLAYER>();
     public int currPlayerCount = 0, totalPlayerCount = 0;
     public double timer = 0;
 
@@ -56,11 +56,10 @@ public class NetworkManager : MonoBehaviour
         Network.InitializeServer(32, 25000, false);
         Network.sendRate = 15;
         Debug.Log("Server initialized, sendRate: " + Network.sendRate);
-        timer = Time.time;
-        PLAYERS = new List<PLAYER>();
+        NetworkManager.instance.timer = Time.time;
 
         NewTimedMessage("Connected as SERVER", 6);
-        serverStarted = true;
+        NetworkManager.instance.serverStarted = true;
     }
 
     public NetworkConnectionError ConnectToServer()
@@ -72,6 +71,11 @@ public class NetworkManager : MonoBehaviour
     {
         //NewTimedMessage("Couldn't find a server to connect to. Have you created one?", 5);
 	}
+
+    public void Update()
+    {
+
+    }
 
     public void OnGUI()
     {
@@ -86,56 +90,53 @@ public class NetworkManager : MonoBehaviour
 
         if (Network.isServer)
         {
-            GUI.Label(new Rect(Screen.width - 130, 10, 125, 20), "Player Count: " + currPlayerCount.ToString());
-            for (int i = 0; i < currPlayerCount; i++)
+            GUI.Label(new Rect(Screen.width - 130, 10, 125, 20), "Player Count: " + NetworkManager.instance.currPlayerCount.ToString());
+            GUI.Label(new Rect(Screen.width - 150, 40, 125, 20), "PLAYERS Count: " + NetworkManager.instance.PLAYERS.Count.ToString());
+            for (int i = 0; i < NetworkManager.instance.currPlayerCount; i++)
             {
                 //GUI.Label(new Rect(20, 50 + (i * 20), 200, 20), "Player " + i + " Position: " + PLAYERS[i].playerPos.ToString());
             }
         }
     }
 
+    
+
     public void OnPlayerConnected(NetworkPlayer p)
     {
-        totalPlayerCount++;
-        currPlayerCount++;
-        networkView.RPC("Identification", p, totalPlayerCount, p);
-    }
+        NetworkManager.instance.currPlayerCount++;
+        NetworkManager.instance.totalPlayerCount++;
 
-    [RPC]
-    public void Identification(int totalPCount, NetworkPlayer p)
-    {
-        GameObject player = Network.Instantiate(playerPrefab, SpawnPosition(), Quaternion.identity, 0) as GameObject;
-        networkView.RPC("TellServer", RPCMode.Server, p, player.transform.position);
-        player.GetComponent<Player>().playerID = totalPCount;
-        if (totalPCount % 2 == 0)
-            player.GetComponent<Player>().type = 1;
-        else
-            player.GetComponent<Player>().type = 2;
-    }
-
-    [RPC]
-    public void TellServer(NetworkPlayer p, Vector3 pos)
-    {
         PLAYER newPlayer = new PLAYER();
         newPlayer.player = p;
-        newPlayer.playerID = totalPlayerCount;
+        newPlayer.playerID = NetworkManager.instance.totalPlayerCount;
+        //newPlayer.pObject = player;
 
-        if (totalPlayerCount % 2 == 0)
-            newPlayer.playerType = 1;
-        else
+        if (NetworkManager.instance.totalPlayerCount % 2 == 0)
             newPlayer.playerType = 2;
+        else
+            newPlayer.playerType = 1;
 
-        PLAYERS.Add(newPlayer);
+        networkView.RPC("Identification", p, NetworkManager.instance.totalPlayerCount, p, newPlayer.playerType);
+        NetworkManager.instance.PLAYERS.Add(newPlayer);
         networkView.RPC("NewTimedMessage", RPCMode.All, "Player " + newPlayer.playerID + " connected", 5.0f);
+    }
+
+    [RPC]
+    public void Identification(int totalPCount, NetworkPlayer p, int type)
+    {
+        networkView.RPC("TellServer", RPCMode.Server, p);
+        GameObject player = Network.Instantiate(playerPrefab, SpawnPosition(), Quaternion.identity, 0) as GameObject;
+        player.GetComponent<Player>().player.playerID = totalPCount;
+        player.GetComponent<Player>().player.playerType = type;
     }
 
     public void OnPlayerDisconnected(NetworkPlayer p)
     {
-        currPlayerCount--;
+        NetworkManager.instance.currPlayerCount--;
 
-        PLAYER deadPlayer = PLAYERS.Find(PLAYER => PLAYER.player == p);
+        PLAYER deadPlayer = NetworkManager.instance.PLAYERS.Find(PLAYER => PLAYER.player == p);
         Debug.Log("Player " + deadPlayer.playerID + " disconnected...");
-        PLAYERS.RemoveAll(PLAYER => PLAYER.player == p);
+        NetworkManager.instance.PLAYERS.RemoveAll(PLAYER => PLAYER.player == p);
         Network.RemoveRPCs(p);
         Network.DestroyPlayerObjects(p);
 
