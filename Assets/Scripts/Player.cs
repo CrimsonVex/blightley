@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Player : MonoBehaviour
 {
-    public int type = 0;
     public GameObject timedMessagePrefab;
     public int playerID;
     public NetworkManager.PLAYER player = new NetworkManager.PLAYER();
@@ -15,7 +14,6 @@ public class Player : MonoBehaviour
 
         if (Network.isServer)
         {
-            Debug.Log("A");
             int index = NetworkManager.Instance.PLAYERS.FindIndex(a => a.player == gameObject.networkView.owner);
             NetworkManager.PLAYER p = new NetworkManager.PLAYER();
             p.player = NetworkManager.Instance.PLAYERS[index].player;
@@ -32,26 +30,6 @@ public class Player : MonoBehaviour
         if (networkView.isMine)
             NewTimedMessage("Connected as CLIENT [Player " + Network.player.ToString() + "]", 5);
         playerID = int.Parse(Network.player.ToString());
-    }
-
-    void Update()
-    {
-
-    }
-
-    void OnSerializeNetworkView(BitStream stream, NetworkMessageInfo info)
-    {
-        if (stream.isWriting)   // Send data to server
-        {
-            int t = type;
-            stream.Serialize(ref t);
-        }
-        else
-        {                // Read data from remote client
-            int t = 0;
-            stream.Serialize(ref t);
-            type = t;
-        }
     }
 
     void NewTimedMessage(string m, float l)
