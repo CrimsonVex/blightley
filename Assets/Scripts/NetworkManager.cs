@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Pathfinding;
 
 public class NetworkManager : MonoBehaviour 
 {
@@ -215,8 +216,10 @@ public class NetworkManager : MonoBehaviour
 
     public Vector3 SpawnPosition()
     {
-        // Needs fixing
-        return new Vector3(Random.Range(-15, 15), 0.66f, Random.Range(-15, 15));
+        Vector3 pos = new Vector3(Random.Range(-40, 40), 0, Random.Range(-40, 40));
+        Node node = (Node)AstarPath.active.GetNearest(pos);
+        Vector3 openPoint = (Vector3)node.position;
+        return new Vector3(openPoint.x, playerPrefab.transform.position.y, openPoint.z);
     }
 
     [RPC]

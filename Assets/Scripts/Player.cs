@@ -21,7 +21,6 @@ public class Player : MonoBehaviour
             p.playerType = NetworkManager.Instance.PLAYERS[index].playerType;
             p.pObject = gameObject;
             NetworkManager.Instance.PLAYERS[index] = p;
-            Debug.Log("B: " + NetworkManager.Instance.PLAYERS[index].pObject.transform.position);
         }
     }
 

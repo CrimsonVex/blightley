@@ -4,8 +4,11 @@ using System.Collections;
 public class PlayerAnimation : MonoBehaviour
 {
     public Animation _anim;
+    public enum STATE { Idle, Walk, Run, Attack, Wince, Death, Crouch, BipedToRun };
     public string[] animations = new string[8];
     private string oldAnimation, currentAnimation;
+    private STATE s;
+    private bool isWalking = false;
     //walk, run, attack, wince, death, bipedToRun, idle, crouch;
 
     void Start()
@@ -21,33 +24,46 @@ public class PlayerAnimation : MonoBehaviour
         animations[7] = "BipedToRun";
         networkView.RPC("setAnimationState", RPCMode.Others, 0);
         setAnimationState(0);
+        s = STATE.Idle;
     }
 
     void Update()
     {
+        if (s == STATE.Idle)        setAnimation(animations[0]);
+        if (s == STATE.Walk)        setAnimation(animations[1]);
+        if (s == STATE.Run)         setAnimation(animations[2]);
+        if (s == STATE.Attack)      setAnimation(animations[3]);
+        if (s == STATE.Wince)       setAnimation(animations[4]);
+        if (s == STATE.Death)       setAnimation(animations[5]);
+        if (s == STATE.Crouch)      setAnimation(animations[6]);
+        if (s == STATE.BipedToRun)  setAnimation(animations[7]);
+
         if (Input.GetAxis("Vertical") > 0.5f)
-            setAnimation(animations[1]);
-        else
-            setAnimation(animations[0]);
+        {
+            if (s != STATE.Run || (Input.GetButtonUp("Sprint") && s == STATE.Run))
+                Walk();
+            if (Input.GetButtonDown("Sprint"))
+            {
+                if (s == STATE.Run)
+                    Walk();
+                else
+                    Run();
+            }
+
+        }
+        else if (s == STATE.Walk || s == STATE.Run)
+            s = STATE.Idle;
 
         if (Input.GetButtonDown("Jump"))
-            setAnimation(animations[3]);
-        if (Input.GetKeyDown(KeyCode.U))
-            setAnimation(animations[4]);
-        if (Input.GetKeyDown(KeyCode.I))
-            setAnimation(animations[5]);
-        if (Input.GetKeyDown(KeyCode.O) && !_anim.IsPlaying(animations[6]))
-        {
-            setAnimation(animations[6]);
-            Debug.Log("1");
-        }
-        else if (Input.GetKeyDown(KeyCode.O) && _anim.IsPlaying(animations[6]))
-        {
-            setAnimation(animations[0]);
-            Debug.Log("2");
-        }
+            s = STATE.Attack;
 
-        //Debug.Log(currentAnimation + "     " + oldAnimation);
+        if (Input.GetButtonDown("Crouch"))
+        {
+            if (s == STATE.Crouch)
+                s = STATE.Idle;
+            else
+                s = STATE.Crouch;
+        }
 
         // Ensure the default animations only play if another animation isnt already playing
         // New connecting players need to see other players at their current correct frame for their animations
@@ -55,6 +71,18 @@ public class PlayerAnimation : MonoBehaviour
         // Animations are kind of irrelevant
         // You should be sending gameplay events that should trigger animations locally
         // Fuck sending animations
+    }
+
+    void Walk()
+    {
+        s = STATE.Walk;
+        gameObject.GetComponent<Move>().movementModifier = gameObject.GetComponent<Move>().movementModifierDefault;
+    }
+
+    void Run()
+    {
+        s = STATE.Run;
+        gameObject.GetComponent<Move>().movementModifier = gameObject.GetComponent<Move>().movementModifierDefault * 2;
     }
 
     void setAnimation(string state)

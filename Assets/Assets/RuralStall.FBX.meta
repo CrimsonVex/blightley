@@ -1,0 +1,117 @@
+fileFormatVersion: 2
+guid: 94b75839551fd904491d9c4c4ad59732
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: Dummy001
+    100002: //RootNode
+    100004: RuralStallBase
+    100006: RuralStallExcWood
+    100008: RuralStallHorizonWood1
+    100010: RuralStallHorizonWood2
+    100012: RuralStallHorizonWood3
+    100014: RuralStallHorizonWood4
+    100016: RuralStallRoofCloser
+    100018: RuralStallVerticalWoods1
+    100020: RuralStallVerticalWoods2
+    100022: RuralStallVerticalWoods3
+    100024: RuralStallVerticalWoods4
+    400000: Dummy001
+    400002: //RootNode
+    400004: RuralStallBase
+    400006: RuralStallExcWood
+    400008: RuralStallHorizonWood1
+    400010: RuralStallHorizonWood2
+    400012: RuralStallHorizonWood3
+    400014: RuralStallHorizonWood4
+    400016: RuralStallRoofCloser
+    400018: RuralStallVerticalWoods1
+    400020: RuralStallVerticalWoods2
+    400022: RuralStallVerticalWoods3
+    400024: RuralStallVerticalWoods4
+    2300000: RuralStallBase
+    2300002: RuralStallExcWood
+    2300004: RuralStallHorizonWood1
+    2300006: RuralStallHorizonWood2
+    2300008: RuralStallHorizonWood3
+    2300010: RuralStallHorizonWood4
+    2300012: RuralStallRoofCloser
+    2300014: RuralStallVerticalWoods1
+    2300016: RuralStallVerticalWoods2
+    2300018: RuralStallVerticalWoods3
+    2300020: RuralStallVerticalWoods4
+    3300000: RuralStallBase
+    3300002: RuralStallExcWood
+    3300004: RuralStallHorizonWood1
+    3300006: RuralStallHorizonWood2
+    3300008: RuralStallHorizonWood3
+    3300010: RuralStallHorizonWood4
+    3300012: RuralStallRoofCloser
+    3300014: RuralStallVerticalWoods1
+    3300016: RuralStallVerticalWoods2
+    3300018: RuralStallVerticalWoods3
+    3300020: RuralStallVerticalWoods4
+    4300000: RuralStallBase
+    4300002: RuralStallRoofCloser
+    4300004: RuralStallHorizonWood1
+    4300006: RuralStallVerticalWoods1
+    4300008: RuralStallVerticalWoods3
+    4300010: RuralStallHorizonWood3
+    4300012: RuralStallVerticalWoods4
+    4300014: RuralStallHorizonWood4
+    4300016: RuralStallVerticalWoods2
+    4300018: RuralStallHorizonWood2
+    4300020: RuralStallExcWood
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: .0132999998
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 2
+  userData: 
