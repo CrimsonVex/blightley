@@ -81,6 +81,7 @@ public class NPC : MonoBehaviour
             thisNPC.npc = NetworkManager.Instance.NPCS[index].npc;
             thisNPC.npcID = NetworkManager.Instance.NPCS[index].npcID;
             thisNPC.npcType = 1;
+            thisNPC.npcObject = NetworkManager.Instance.NPCS[index].npcObject;
             thisNPC.target = NetworkManager.Instance.NPCS[index].target;
             NetworkManager.Instance.NPCS[index] = thisNPC;
 
@@ -124,6 +125,7 @@ public class NPC : MonoBehaviour
             npc.npc = gameObject;
             npc.npcID = id;
             npc.npcType = 0;
+            npc.npcObject = gameObject;
             npc.target = targetPos;
             NetworkManager.Instance.NPCS.Add(npc);
         }

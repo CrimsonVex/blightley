@@ -48,6 +48,7 @@ public class NetworkManager : MonoBehaviour
         public GameObject npc;
         public int npcID;
         public int npcType; // 0 is normal, 1 is infected
+        public GameObject npcObject;
         public Vector3 target;
     }
 
@@ -63,33 +64,53 @@ public class NetworkManager : MonoBehaviour
     public double timer = 0;
 
     private bool displayTypeChoice = false;
+
+    private int remotePort = 25000;
+    private float refreshTimerTimeSince = 0f;
+    private ConnectionTesterStatus natCapable = ConnectionTesterStatus.Undetermined;
+    private bool filterNATHosts = false;
+    private string gameName = "NetworkTest00001";
     //void Awake() { Time.timeScale = 0.01f; }
+
+    void OnFailedToConnectToMasterServer(NetworkConnectionError info)
+    {
+	    Debug.Log(info);
+    }
+
+    void OnFailedToConnect(NetworkConnectionError info)
+    {
+	    Debug.Log(info);
+    }
+
+    void Awake()
+    {
+        natCapable = Network.TestConnection();
+
+        if (Network.HavePublicAddress())
+            Debug.Log("This machine has a public IP address");
+        else
+            Debug.Log("This machine has a private IP address");
+    }
+
+    void Update()
+    {
+        if ((refreshTimerTimeSince += Time.deltaTime) > 1.0f)
+        {
+            refreshTimerTimeSince = 0f;
+        }
+    }
 
     public void StartServer()
     {
-        Network.InitializeServer(32, 25000, false);
+        Network.InitializeServer(32, 25002, !Network.HavePublicAddress());
+        MasterServer.updateRate = 3;
+        MasterServer.RegisterHost(gameName, "Some sort of networking test", "Anday");
         Network.sendRate = 15;
         Debug.Log("Server initialized, sendRate: " + Network.sendRate);
         NetworkManager.instance.timer = Time.time;
 
         NewTimedMessage("Connected as SERVER", 6);
         NetworkManager.instance.serverStarted = true;
-    }
-
-    public NetworkConnectionError ConnectToServer(int t)
-    {
-        NetworkManager.instance.playerJoinType = t;
-        return Network.Connect("127.0.0.1", 25000, "");
-    }
-
-    public void OnFailedToConnect(NetworkConnectionError error)
-    {
-        //NewTimedMessage("Couldn't find a server to connect to. Have you created one?", 5);
-	}
-
-    public void OnConnectedToServer()
-    {
-
     }
 
     public void OnDisconnectedFromServer(NetworkDisconnection info)
@@ -109,8 +130,13 @@ public class NetworkManager : MonoBehaviour
     {
         Debug.Log(log);
         NetworkPlayer p = gameObject.networkView.owner;
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject g in players)
+            Destroy(g);
         Network.RemoveRPCs(p);
         Network.DestroyPlayerObjects(p);
+        MasterServer.ClearHostList();
+        MasterServer.RequestHostList(gameName);
     }
 
     public void OnGUI()
@@ -120,21 +146,58 @@ public class NetworkManager : MonoBehaviour
             if (GUI.Button(new Rect(10, 10, 100, 20), "Start Server"))
                 StartServer();
 
-            if (GUI.Button(new Rect(120, 10, 150, 20), "Join Existing Game"))
-                NetworkManager.instance.displayTypeChoice = true;
-
-            if (NetworkManager.instance.displayTypeChoice)
+            if (GUI.Button(new Rect(110, 10, 130, 20), "Refresh Server List"))
             {
-                GUI.Label(new Rect(280, 5, 200, 20), "Select player type:");
-                if (GUI.Button(new Rect(300, 30, 150, 20), "Mutant"))
-                    ConnectToServer(1);
-                if (GUI.Button(new Rect(300, 55, 150, 20), "Hero"))
-                    ConnectToServer(2);
+                MasterServer.ClearHostList();
+                MasterServer.RequestHostList(gameName);
             }
+
+            HostData[] data = MasterServer.PollHostList();
+
+            for (int i = 0; i < data.Length; i++)
+            {
+                // Do not display NAT enabled games if we cannot do NAT punchthrough
+                if (!(filterNATHosts && data[i].useNat))
+                {
+                    string name = data[i].gameName + " " + data[i].connectedPlayers + " / " + data[i].playerLimit;
+                    string hostInfo;
+                    hostInfo = "[";
+                    // Here we display all IP addresses, there can be multiple in cases where
+                    // internal LAN connections are being attempted. In the GUI we could just display
+                    // the first one in order not confuse the end user, but internally Unity will
+                    // do a connection check on all IP addresses in the element.ip list, and connect to the
+                    // first valid one.
+                    for (int j = 0; j < data[i].ip.Length; j++)
+                        hostInfo = hostInfo + data[i].ip[j] + ":" + data[i].port + " ";
+
+                    hostInfo = hostInfo + "]   \"" + data[i].gameName + "\"    --Player Count: " + data[i].connectedPlayers + "/" + data[i].playerLimit;
+
+                    if (GUI.Button(new Rect(20, 90, 600, 40), hostInfo.ToString()))
+                        NetworkManager.instance.displayTypeChoice = true;
+
+                    if (NetworkManager.instance.displayTypeChoice)
+                    {
+                        GUI.Label(new Rect(280, 5, 200, 20), "Select player type:");
+                        if (GUI.Button(new Rect(300, 30, 150, 20), "Mutant"))
+                        {
+                            NetworkManager.instance.playerJoinType = 1;
+                            Network.Connect(data[i]);
+                        }
+                        if (GUI.Button(new Rect(300, 55, 150, 20), "Hero"))
+                        {
+                            NetworkManager.instance.playerJoinType = 2;
+                            Network.Connect(data[i]);
+                        }
+                    }
+                }
+            }
+
+            
         }
 
         if (Network.isServer)
         {
+            GUI.Label(new Rect(Screen.width - 410, Screen.height - 25, 400, 20), "IP: " + Network.player.ipAddress + "     Port: " + Network.player.port);
             GUI.Label(new Rect(400, 10, 200, 20), "Total Player Count: " + NetworkManager.instance.totalPlayerCount.ToString());
             GUI.Label(new Rect(400, 35, 200, 20), "Current Player Count: " + NetworkManager.instance.currPlayerCount.ToString());
             GUI.Label(new Rect(400, 60, 200, 20), "PLAYERS.Count: " + NetworkManager.instance.PLAYERS.Count.ToString());
@@ -152,8 +215,19 @@ public class NetworkManager : MonoBehaviour
             {
                 GUI.Label(new Rect(10, 350 + (i * 20), 300, 20), "NPC " + NetworkManager.instance.NPCS[i].npcID.ToString()
                     + "    Type: " + NetworkManager.instance.NPCS[i].npcType.ToString()
-                    + "    Position: " + NetworkManager.instance.NPCS[i].target.ToString()
+                    + "    Position: " + NetworkManager.instance.NPCS[i].npcObject.transform.position.ToString()
                     );
+            }
+        }
+
+        if (Network.isClient)
+        {
+            if (GUI.Button(new Rect(Screen.width - 410, Screen.height - 25, 200, 20), "Disconnect"))
+            {
+                Network.Disconnect();
+                MasterServer.UnregisterHost();
+                MasterServer.ClearHostList();
+                MasterServer.RequestHostList(gameName);
             }
         }
     }
