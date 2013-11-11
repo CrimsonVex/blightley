@@ -20,10 +20,10 @@ public class Move : MonoBehaviour
         if (networkView.isMine)
         {
             if (Input.GetAxis("Vertical") > 0.5f)
-                rigidbody.AddRelativeForce(Vector3.forward * Input.GetAxis("Vertical") * movementModifier);
+                rigidbody.AddRelativeForce((Vector3.forward * Input.GetAxis("Vertical") * movementModifier) * Time.deltaTime);
             else if (Input.GetAxis("Vertical") < -0.5f)
-                rigidbody.AddRelativeForce(Vector3.forward * Input.GetAxis("Vertical") * movementModifierDefault / 5);
-            rigidbody.AddRelativeTorque(new Vector3(0, Input.GetAxis("Horizontal") * rotationModifier, 0));
+                rigidbody.AddRelativeForce((Vector3.forward * Input.GetAxis("Vertical") * (movementModifierDefault / 5)) * Time.deltaTime);
+            rigidbody.AddRelativeTorque(new Vector3(0, (Input.GetAxis("Horizontal") * rotationModifier) * Time.deltaTime, 0));
         }
     }
 }
