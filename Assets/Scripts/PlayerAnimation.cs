@@ -22,47 +22,54 @@ public class PlayerAnimation : MonoBehaviour
         animations[5] = "Death";
         animations[6] = "Crouch";
         animations[7] = "BipedToRun";
-        networkView.RPC("setAnimationState", RPCMode.Others, 0);
-        setAnimationState(0);
-        s = STATE.Idle;
+
+        if (networkView.isMine)
+        {
+            networkView.RPC("setAnimationState", RPCMode.Others, 0);
+            setAnimationState(0);
+            s = STATE.Idle;
+        }
     }
 
     void Update()
     {
-        if (s == STATE.Idle)        setAnimation(animations[0]);
-        if (s == STATE.Walk)        setAnimation(animations[1]);
-        if (s == STATE.Run)         setAnimation(animations[2]);
-        if (s == STATE.Attack)      setAnimation(animations[3]);
-        if (s == STATE.Wince)       setAnimation(animations[4]);
-        if (s == STATE.Death)       setAnimation(animations[5]);
-        if (s == STATE.Crouch)      setAnimation(animations[6]);
-        if (s == STATE.BipedToRun)  setAnimation(animations[7]);
-
-        if (Input.GetAxis("Vertical") > 0.5f)
+        if (networkView.isMine)
         {
-            if (s != STATE.Run || (Input.GetButtonUp("Sprint") && s == STATE.Run))
-                Walk();
-            if (Input.GetButtonDown("Sprint"))
+            if (s == STATE.Idle) setAnimation(animations[0]);
+            if (s == STATE.Walk) setAnimation(animations[1]);
+            if (s == STATE.Run) setAnimation(animations[2]);
+            if (s == STATE.Attack) setAnimation(animations[3]);
+            if (s == STATE.Wince) setAnimation(animations[4]);
+            if (s == STATE.Death) setAnimation(animations[5]);
+            if (s == STATE.Crouch) setAnimation(animations[6]);
+            if (s == STATE.BipedToRun) setAnimation(animations[7]);
+
+            if (Input.GetAxis("Vertical") > 0.5f)
             {
-                if (s == STATE.Run)
+                if (s != STATE.Run || (Input.GetButtonUp("Sprint") && s == STATE.Run))
                     Walk();
-                else
-                    Run();
+                if (Input.GetButtonDown("Sprint"))
+                {
+                    if (s == STATE.Run)
+                        Walk();
+                    else
+                        Run();
+                }
+
             }
-
-        }
-        else if (s == STATE.Walk || s == STATE.Run)
-            s = STATE.Idle;
-
-        if (Input.GetButtonDown("Jump"))
-            s = STATE.Attack;
-
-        if (Input.GetButtonDown("Crouch"))
-        {
-            if (s == STATE.Crouch)
+            else if (s == STATE.Walk || s == STATE.Run)
                 s = STATE.Idle;
-            else
-                s = STATE.Crouch;
+
+            if (Input.GetButtonDown("Jump"))
+                s = STATE.Attack;
+
+            if (Input.GetButtonDown("Crouch"))
+            {
+                if (s == STATE.Crouch)
+                    s = STATE.Idle;
+                else
+                    s = STATE.Crouch;
+            }
         }
 
         // Ensure the default animations only play if another animation isnt already playing
