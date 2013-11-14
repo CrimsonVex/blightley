@@ -11,7 +11,13 @@ public class Player : MonoBehaviour
 	void OnNetworkInstantiate(NetworkMessageInfo i)
     {
         if (networkView.isMine)
+        {
             Camera.main.GetComponent<CameraController>().player = transform;    // Tell the camera to track this player object
+
+            // Remove objects the client doesn't need
+            Destroy(GameObject.FindGameObjectWithTag("A*"));
+            Destroy(GameObject.FindGameObjectWithTag("NPCSpawner"));
+        }
 
         if (Network.isServer)
         {

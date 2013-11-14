@@ -157,7 +157,7 @@ public class NetworkManager : MonoBehaviour
                     for (int j = 0; j < data[i].ip.Length; j++)
                         hostInfo = hostInfo + data[i].ip[j] + ":" + data[i].port + " ";
 
-                    hostInfo = hostInfo + "]   \"" + data[i].gameName + "\"    --Player Count: " + data[i].connectedPlayers + "/" + data[i].playerLimit;
+                    hostInfo = hostInfo + "]   \"" + data[i].gameName + "\"    --Player Count: " + (data[i].connectedPlayers - 1) + "/" + data[i].playerLimit;
 
                     if (GUI.Button(new Rect(20, 90, 600, 40), hostInfo.ToString()))
                         NetworkManager.instance.displayTypeChoice = true;
