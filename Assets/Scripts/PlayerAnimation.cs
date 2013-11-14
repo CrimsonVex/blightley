@@ -70,19 +70,29 @@ public class PlayerAnimation : MonoBehaviour
 
         // Animations are kind of irrelevant
         // You should be sending gameplay events that should trigger animations locally
-        // Fuck sending animations
+        // Screw sending animations
     }
 
     void Walk()
     {
         s = STATE.Walk;
-        gameObject.GetComponent<Move>().movementModifier = gameObject.GetComponent<Move>().movementModifierDefault;
+
+        // This controls the movement speed of the player for either walk or sprint.
+        if (gameObject.name == "NewPlayer(Clone)")
+            gameObject.GetComponent<Move>().movementModifier = gameObject.GetComponent<Move>().movementModifierDefault;
+        else if (gameObject.name == "NewPlayer_CC(Clone)")
+            gameObject.GetComponent<Move_CC>().speed = gameObject.GetComponent<Move_CC>().defSpeed;
     }
 
     void Run()
     {
         s = STATE.Run;
-        gameObject.GetComponent<Move>().movementModifier = gameObject.GetComponent<Move>().movementModifierDefault * 2;
+
+        // This controls the movement speed of the player for either walk or sprint.
+        if (gameObject.name == "NewPlayer(Clone)")
+            gameObject.GetComponent<Move>().movementModifier = gameObject.GetComponent<Move>().movementModifierDefault * 3;
+        else if (gameObject.name == "NewPlayer_CC(Clone)")
+            gameObject.GetComponent<Move_CC>().speed = gameObject.GetComponent<Move_CC>().defSpeed * 2.5f;
     }
 
     void setAnimation(string state)

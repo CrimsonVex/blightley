@@ -1,6 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2008
 
+Project("{AF0E551A-C5E9-418F-6F02-DAF6E8A827D5}") = "NetworkTest", "Assembly-CSharp-firstpass.csproj", "{0CACF304-63C6-CF25-0370-130FC2FD7BDE}"
+EndProject
 Project("{AF0E551A-C5E9-418F-6F02-DAF6E8A827D5}") = "NetworkTest", "Assembly-CSharp.csproj", "{489CA3C4-DFBE-AA71-CF2A-406118B5137C}"
 EndProject
 Project("{AF0E551A-C5E9-418F-6F02-DAF6E8A827D5}") = "NetworkTest", "Assembly-CSharp-Editor.csproj", "{80D34AB7-894A-3F69-84D6-925632BD8ECD}"
@@ -13,6 +15,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0CACF304-63C6-CF25-0370-130FC2FD7BDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CACF304-63C6-CF25-0370-130FC2FD7BDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CACF304-63C6-CF25-0370-130FC2FD7BDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CACF304-63C6-CF25-0370-130FC2FD7BDE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{489CA3C4-DFBE-AA71-CF2A-406118B5137C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{489CA3C4-DFBE-AA71-CF2A-406118B5137C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{489CA3C4-DFBE-AA71-CF2A-406118B5137C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -29,7 +35,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-																																																																																				GlobalSection(MonoDevelopProperties) = preSolution
+																																																																																													GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Assembly-CSharp.csproj
 		Policies = $0
 		$0.TextStylePolicy = $1

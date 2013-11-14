@@ -5,11 +5,11 @@ using Pathfinding;
 
 public class NPCSpawner : MonoBehaviour
 {
-    public int npcCount = 3;
+    public int npcCount = 3;        // How many NPC's do we want?
     public GameObject npcPrefab;
 
     private int currentNPCID = 0;
-    private List<NetworkManager.NPC> infectedList = new List<NetworkManager.NPC>();
+    private List<NetworkManager.NPC> infectedList = new List<NetworkManager.NPC>();     // List of all infected NPC's
 
     void OnServerInitialized()
 	{
@@ -19,11 +19,17 @@ public class NPCSpawner : MonoBehaviour
             {
                 for (int i = 0; i < npcCount; i++)
                 {
-                    Vector3 randomPos = new Vector3(Random.Range(-40, 40), npcPrefab.transform.position.y, Random.Range(-40, 40));
-                    Node node = (Node)AstarPath.active.GetNearest(randomPos);
+                    // Spawn NPC somewhere that is an 'open' node that isn't inside or near a collider
+                    Node node = (Node)AstarPath.active.GetNearest(new Vector3(Random.Range(-40, 40), 0, Random.Range(-40, 40)));
+
+                    while (!node.walkable)
+                        node = (Node)AstarPath.active.GetNearest(new Vector3(Random.Range(-40, 40), 0, Random.Range(-40, 40)));
+
                     Vector3 openPoint = (Vector3)node.position;
                     openPoint = new Vector3(openPoint.x, npcPrefab.transform.position.y, openPoint.z);
                     GameObject npc = Network.Instantiate(npcPrefab, openPoint, Quaternion.identity, 0) as GameObject;
+
+                    // Assign the NPC an ID number
                     npc.GetComponent<NPC>().id = currentNPCID++;
                 }
             }
@@ -34,6 +40,7 @@ public class NPCSpawner : MonoBehaviour
 
     void OnGUI()
     {
+        // Information for the server regarding NPC counts.
         if (Network.isServer)
         {
             GUI.Label(new Rect(400, 250, 300, 20), "Number of total infected NPCs: " + NetworkManager.Instance.npcTotalInfected.ToString());

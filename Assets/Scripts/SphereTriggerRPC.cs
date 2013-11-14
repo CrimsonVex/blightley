@@ -3,6 +3,11 @@ using System.Collections;
 
 public class SphereTriggerRPC : MonoBehaviour
 {
+    // So this object was originally a debug object that allowed players to interact with
+    // an object owned by the server, although this was basically done with NPC's anyway.
+
+    // I need to update this code to include a list for all players currently within its vacinity as well
+
     public GameObject timedMessagePrefab;
     private Vector3 blue, green, red;
     private string currentPlayerInside;

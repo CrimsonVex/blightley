@@ -3,6 +3,9 @@ using System.Collections;
 
 public class Move : MonoBehaviour
 {
+    // This script was used when the player used to be Rigidbody. Move_CC is now used for the
+    // character controller player type.
+
     public float movementModifier;
     public float movementModifierDefault;
     public float rotationModifier;
